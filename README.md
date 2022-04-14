@@ -1,5 +1,6 @@
-# PanelRePROducible
-# **Aggre**gate **Mend**elian **Mod**els
+# AggreMendMod
+
+**Aggre**gate **Mend**elian **Mod**els
 
 This repository contains code to reproduce the results presented in the paper 
 
