@@ -9,6 +9,6 @@
 #SBATCH -n 1 #Number of cores
 #SBATCH -N 1 #All cores on one machine
 #SBATCH --mail-type=END # Email
-#SBATCH --mail-user=jwliang@g.harvard.edu
+#SBATCH --mail-user=jwliang@stanford.edu
 
-R CMD BATCH --no-restore --no-save ../estimate_oc.R results/cluster/estimate.Rout
+R CMD BATCH --no-restore --no-save ../estimate_pp21.R results/cluster/estimate.Rout
