@@ -12,6 +12,16 @@ sapply(files.sources, source)
 # Load CGN family structure
 load("../../../CGN/CGN.fam.structure.RData")
 
+# Genes and cancers
+genes =  c("ATM", "BARD1", "BRCA1", "BRCA2", "BRIP1", 
+           "CDH1", "CDK4", "CDKN2A", "CHEK2", "EPCAM", 
+           "MLH1", "MSH2", "MSH6", "NBN", "PALB2", "PMS2", 
+           "PTEN", "RAD51C", "RAD51D", "STK11", "TP53")
+cancers = c("Brain", "Breast", "Colorectal", "Endometrial", "Gastric", 
+            "Kidney", "Leukemia", "Melanoma", "Ovarian", "Osteosarcoma", 
+            "Pancreas", "Prostate", "Small Intestine", "Soft Tissue Sarcoma", 
+            "Thyroid", "Urinary Bladder", "Hepatobiliary")
+
 ###############################################################################
 
 # 1000 family simulations
@@ -39,8 +49,7 @@ fam_output = lapply(1:nsim, function(i){
   
   # Simulate family
   fam_PP = sim.runSimFam(nSibsPatern, nSibsMatern, nSibs, nGrandchild, 
-                         new_db, PanelPRO:::MODELPARAMS$PanPRO22$GENES, 
-                         PanelPRO:::MODELPARAMS$PanPRO22$CANCERS, 
+                         new_db, genes, cancers, 
                          includeGeno = TRUE, affTime = TRUE, ageMin = 1)
   
   # Add extra columns

@@ -1,4 +1,4 @@
-Code to validate PanelPRO models on data from the USC-Stanford Hereditary Cancer Panel (HCP) Testing Study<sup>[1](#myfootnote1)</sup> and the Center for Cancer Risk Assessment at Massachusetts General Hospital (MGH). 
+Code to validate models on data from the USC-Stanford Hereditary Cancer Panel (HCP) Testing Study<sup>[1](#myfootnote1)</sup> and the Center for Cancer Risk Assessment at Massachusetts General Hospital (MGH). 
 
 Files: 
 - `run_model_functions.R`: Functions that run models and extract carrier probability results. 
@@ -12,7 +12,7 @@ Sub-directories:
 Each sub-directory contains the following files: 
 - `fam.R`: Code to run models on the validation cohort. 
 - `rscript_fam.job` and`submitJobs_fam.sh`: Shell scripts for running models on validation data, for usage on a high performance computing cluster. 
-- `diagnostics.`: Code to obtain diagnostic metrics from evaluating models on validation data.
+- `diagnostics.R`: Code to obtain diagnostic metrics from evaluating models on validation data.
 - `diagnostics.sh`: Shell script for obtaining diagnostic metrics, for usage on a high performance computing cluster. 
 - `diagnostics_boot.R`: Code to obtain diagnostic metrics from 10 bootstrap samples.
 - `rscript_diagnostics_boot_job`and `submitJobs_diagnostics_boot.sh`: Shell scripts for obtaining diagnostic metrics from 1000 bootstrap samples, for usage on a high performance computing cluster. 

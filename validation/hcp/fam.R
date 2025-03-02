@@ -4,15 +4,25 @@ s = as.integer(Sys.getenv('SLURM_ARRAY_TASK_ID'))
 # Helper functions
 source("../run_model_functions.R")
 
-# Load HCP families (1362)
-load("hcp_families.rData")
+# Load HCP families
+load("../../../Clinical_validation/hcp/data/pp21_other_cancers/hcp_families.rData")
+
+# Genes and cancers
+genes =  c("ATM", "BARD1", "BRCA1", "BRCA2", "BRIP1", 
+           "CDH1", "CDK4", "CDKN2A", "CHEK2", "EPCAM", 
+           "MLH1", "MSH2", "MSH6", "NBN", "PALB2", "PMS2", 
+           "PTEN", "RAD51C", "RAD51D", "STK11", "TP53")
+cancers = c("Brain", "Breast", "Colorectal", "Endometrial", "Gastric", 
+            "Kidney", "Leukemia", "Melanoma", "Ovarian", "Osteosarcoma", 
+            "Pancreas", "Prostate", "Small Intestine", "Soft Tissue Sarcoma", 
+            "Thyroid", "Urinary Bladder", "Hepatobiliary")
 
 ###############################################################################
 
 # Split the families for parallelization
 idx = split(1:length(hcp_families_PP), 
             ceiling(seq_along(1:length(hcp_families_PP)) / 
-                      ceiling(length(hcp_families_PP)/681)))
+                      ceiling(length(hcp_families_PP)/598)))
 
 
 # Run models for comparison on families
@@ -24,8 +34,7 @@ fam_output = lapply(idx[[s]], function(i){
   # Get short cancer names
   cancer_map = PanelPRO:::CANCER_NAME_MAP$short
   names(cancer_map) = PanelPRO:::CANCER_NAME_MAP$long
-  short_cancers = c(cancer_map[PanelPRO:::MODELPARAMS$PanPRO22$CANCERS], 
-                    "OtherCancers")
+  short_cancers = c(cancer_map[cancers], "OtherCancers")
   fam_PP$isAffAllCancers = ifelse(rowSums(fam_PP[,paste0("isAff", short_cancers)], 
                                           na.rm = TRUE) > 0, 1, 0)
   fam_PP$AgeAllCancers = apply(fam_PP[,paste0("Age", short_cancers)], 1, 

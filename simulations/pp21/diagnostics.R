@@ -3,6 +3,16 @@ library(abind)
 # Helper functions
 source("../diagnostics_functions.R")
 
+# Genes and cancers
+genes =  c("ATM", "BARD1", "BRCA1", "BRCA2", "BRIP1", 
+           "CDH1", "CDK4", "CDKN2A", "CHEK2", "EPCAM", 
+           "MLH1", "MSH2", "MSH6", "NBN", "PALB2", "PMS2", 
+           "PTEN", "RAD51C", "RAD51D", "STK11", "TP53")
+cancers = c("Brain", "Breast", "Colorectal", "Endometrial", "Gastric", 
+            "Kidney", "Leukemia", "Melanoma", "Ovarian", "Osteosarcoma", 
+            "Pancreas", "Prostate", "Small Intestine", "Soft Tissue Sarcoma", 
+            "Thyroid", "Urinary Bladder", "Hepatobiliary")
+
 ###############################################################################
 
 # 1000 sets of family results
@@ -20,19 +30,14 @@ for (k in 1:K){
 # Get short cancer names
 cancer_map = PanelPRO:::CANCER_NAME_MAP$short
 names(cancer_map) = PanelPRO:::CANCER_NAME_MAP$long
-short_cancers = cancer_map[PanelPRO:::MODELPARAMS$PanPRO22$CANCERS]
-
-# Number of relatives with > 1 cancer in each family
-mult_cancer_rels = sapply(results, function(x) {
-  sum(rowSums(x$fam[paste0("isAff", short_cancers)]) > 1)
-})
+short_cancers = cancer_map[cancers]
 
 ###############################################################################
 
 # Pull out the proband information from each simulated family
 # Mutation status
 mut_df = data.frame(t(sapply(results, function(x){
-  unlist(x$fam[x$fam$isProband==1,PanelPRO:::MODELPARAMS$PanPRO22$GENES])
+  unlist(x$fam[x$fam$isProband==1,genes])
 })))
 mut_df$ALLGENES = ifelse(rowSums(mut_df) > 0, 1, 0)
 
@@ -40,35 +45,20 @@ mut_df$ALLGENES = ifelse(rowSums(mut_df) > 0, 1, 0)
 prob_df = lapply(1:nrow(results[[1]]$probs), function(i){
   data.frame(t(sapply(results, function(x){x$probs[i,]})))
 })
-names(prob_df) = c("PP22_All", "PP22_First", "Agg")
+names(prob_df) = c("PP21", "Agg")
 
-save(prob_df, mut_df, mult_cancer_rels, file="results/output/all_dfs.rData")
+save(prob_df, mut_df, file="results/output/all_dfs.rData")
 
 ###############################################################################
 
 # Get diagnostics
-all_out = list(
-  AllFamilies = lapply(prob_df, function(x) {
-    get_all_diagnostics(mut_df$ALLGENES, x$ALLGENES)
-  }), 
-  MultipleCancers1 = lapply(prob_df, function(x) {
-    get_all_diagnostics(mut_df$ALLGENES[mult_cancer_rels > 0], 
-                        x$ALLGENES[mult_cancer_rels > 0])
-  }), 
-  MultipleCancers0 = lapply(prob_df, function(x) {
-    get_all_diagnostics(mut_df$ALLGENES[mult_cancer_rels == 0], 
-                        x$ALLGENES[mult_cancer_rels == 0])
-  })
-)
+all_out = lapply(prob_df, function(x) {
+  get_all_diagnostics(mut_df$ALLGENES, x$ALLGENES)
+})
 
-diagnostics = lapply(all_out, function(x) {
-  sapply(x, function(y){y[[1]]})
-})
-carrier_probs = lapply(all_out, function(x) {
-  lapply(x, function(y){y[2:length(y)]})
-})
+diagnostics = sapply(all_out, function(x) {x[[1]]})
+carrier_probs = lapply(all_out, function(x) {x[2:length(x)]})
 
 # Save output
-save(diagnostics, mult_cancer_rels, 
-     file="results/diagnostics/diagnostics.rData")
+save(diagnostics, file="results/diagnostics/diagnostics.rData")
 save(carrier_probs, file="results/diagnostics/carrier_probs.rData")

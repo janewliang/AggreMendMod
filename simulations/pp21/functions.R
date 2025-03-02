@@ -2,6 +2,16 @@
 library(PanelPRO)
 library(abind)
 
+# Genes and cancers
+genes =  c("ATM", "BARD1", "BRCA1", "BRCA2", "BRIP1", 
+           "CDH1", "CDK4", "CDKN2A", "CHEK2", "EPCAM", 
+           "MLH1", "MSH2", "MSH6", "NBN", "PALB2", "PMS2", 
+           "PTEN", "RAD51C", "RAD51D", "STK11", "TP53")
+cancers = c("Brain", "Breast", "Colorectal", "Endometrial", "Gastric", 
+            "Kidney", "Leukemia", "Melanoma", "Ovarian", "Osteosarcoma", 
+            "Pancreas", "Prostate", "Small Intestine", "Soft Tissue Sarcoma", 
+            "Thyroid", "Urinary Bladder", "Hepatobiliary")
+
 # Add ALLGENES gene to the list of acceptable genes
 NEW_GENE_TYPES = c(PanelPRO:::GENE_TYPES, "ALLGENES")
 NEW_GENE_TYPES = NEW_GENE_TYPES[!duplicated(NEW_GENE_TYPES)]
@@ -33,11 +43,14 @@ assignInNamespace("CANCER_NAME_MAP", NEW_CANCER_NAME_MAP,
 ###############################################################################
 
 # Load estimated penetrances
-load("../../est_pen/pp22/estimated_parameters.rData")
+load("../../est_pen/pp21/estimated_parameters.rData")
 
-af = sum(PanelPRODatabase$AlleleFrequency[,"nonAJ"]) + 
-  sum(apply(combn(PanelPRODatabase$AlleleFrequency[,"nonAJ"], 2), 2, prod))
-# 0.01145489
+# Estimate ALLGENES allele frequency
+af_idx = PanelPRO:::formatGeneNames(rownames(PanelPRODatabase$AlleleFrequency), 
+                                    format = "only_gene") %in% genes
+af = sum(PanelPRODatabase$AlleleFrequency[af_idx,"nonAJ"]) + 
+  sum(apply(combn(PanelPRODatabase$AlleleFrequency[af_idx,"nonAJ"], 2), 2, prod))
+# 0.01137739
 
 # New database
 new_db = PanelPRODatabase
@@ -102,6 +115,20 @@ new_db$GermlineTesting = abind(new_db$GermlineTesting,
 
 ################################################################################
 
+# PanelPRO-21 
+PanelPRO21 = function(...) {
+  PanelPRO::PanelPRO(
+    genes = c("ATM", "BARD1", "BRCA1", "BRCA2", "BRIP1", "CDH1", "CDKN2A", 
+              "CDK4", "CHEK2", "EPCAM", "MLH1", "MSH2", "MSH6", "NBN", 
+              "PALB2", "PMS2", "PTEN", "RAD51C", "RAD51D", "STK11", "TP53"), 
+    cancers = c("Brain", "Breast", "Colorectal", "Endometrial", "Gastric", 
+                "Kidney", "Leukemia", "Melanoma", "Ovarian", "Osteosarcoma", 
+                "Pancreas", "Prostate", "Small Intestine", 
+                "Soft Tissue Sarcoma", "Thyroid", "Urinary Bladder", 
+                "Hepatobiliary", "Contralateral"), 
+    ...)
+}
+
 # Extract posterior probabilities estimates as a named vector
 # (ignores lower and upper CI)
 extract_probs = function(res) {
@@ -114,77 +141,32 @@ extract_probs = function(res) {
   return(probs_vec)
 }
 
+# Aggregate 
 run_agg = function(...) {
   PanelPRO::PanelPRO(genes="ALLGENES", 
                      cancers="AllCancers", 
                      ...)
 }
 
-# Function that modifies pedigree so that only first cancers are kept
-firstCancerFam = function(fam) {
-  
-  # Get short cancer names
-  cancer_map = PanelPRO:::CANCER_NAME_MAP$short
-  names(cancer_map) = PanelPRO:::CANCER_NAME_MAP$long
-  short_cancers = cancer_map[PanelPRO:::MODELPARAMS$PanPRO22$CANCERS]
-  
-  # Affection and age columns
-  isaff_cols = paste0("isAff", short_cancers)
-  age_cols = paste0("Age", short_cancers)
-  
-  # Iterate through all family members
-  for (i in 1:nrow(fam)) {
-    # Individual's cancer ages (for affected cancers)
-    cancer_ages = fam[i,age_cols][fam[i,isaff_cols] == 1]
-    
-    if (length(cancer_ages) > 1) {
-      # If there is more than one cancer age, attempt to pick the earliest one
-      first_age_idx = which((cancer_ages) == min((cancer_ages), na.rm = T))
-      
-      if (length(first_age_idx) == 0) { # All cancer ages missing
-        # Pick a random cancer to be first
-        first_age_idx = sample(length(cancer_ages), 1)
-      }  else if (length(first_age_idx) > 1) { # Multiple cancers at first age
-        # Pick a random cancer to be first
-        first_age_idx = sample(first_age_idx, 1)
-      }
-      
-      # Set affection status for all other cancers to 0
-      fam[i,isaff_cols][fam[i,isaff_cols] == 1][-first_age_idx] = 0
-    }
-  }
-  return(fam)
-}
-
 # Function to obtain posterior probabilities
 run_models = function(fam_PP) {
   
-  # Only keep first cancers
-  fam_PP_fc = firstCancerFam(fam_PP)
+  # PanelPRO-21 
+  probs_pp21 = extract_probs(PanelPRO21(fam_PP, database = new_db,
+                                        parallel = FALSE, 
+                                        net = TRUE, max.mut = 2, 
+                                        allow.intervention = FALSE))
   
-  # PanelPRO-22 (all cancers)
-  probs_pp22_ac = extract_probs(PanelPRO::PanelPRO22(fam_PP, database = new_db,
-                                                         parallel = FALSE, 
-                                                         net = TRUE, max.mut = 2, 
-                                                         allow.intervention = FALSE))
-  
-  # PanelPRO-22 (first cancers)
-  probs_pp22_fc = extract_probs(PanelPRO::PanelPRO22(fam_PP_fc, database = new_db,
-                                                         parallel = FALSE, 
-                                                         net = TRUE, max.mut = 2, 
-                                                         allow.intervention = FALSE))
-  
-  # Aggregate all cancers
+  # Aggregate 
   probs_agg = extract_probs(run_agg(fam_PP, database = new_db,
-                                           parallel = FALSE, 
-                                           net = TRUE, 
-                                           allow.intervention = FALSE))
+                                    parallel = FALSE, 
+                                    net = TRUE, 
+                                    allow.intervention = FALSE))
   
   # Carrier probabilities
-  out = rbind(c(probs_pp22_ac[1], 1-probs_pp22_ac[1]), 
-              c(probs_pp22_fc[1], 1-probs_pp22_fc[1]), 
+  out = rbind(c(probs_pp21[1], 1-probs_pp21[1]), 
               probs_agg)
-  rownames(out) = c("pp22_ac", "pp22_fc", "agg")
+  rownames(out) = c("pp21", "agg")
   colnames(out) = c("noncarrier", "ALLGENES")
   
   return(out)

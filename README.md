@@ -4,12 +4,11 @@
 
 This repository contains code to reproduce the results presented in the paper 
 
-> **Liang, J. W., Knapp, S., Shannon, K. M., Bear, L. M., McCarthy, A. M., Idos, G. E., Hong, C., Gruber, S. B., Braun, D., & Parmigiani, G. (2022). Evaluating Mendelian risk prediction models that aggregate across genes and cancers.**
-
+> **Liang, J. W., Shannon, K. M., Bear, L. M., McCarthy, A. M., Idos, G. E., Hong, C., Gruber, S. B., Braun, D., & Parmigiani, G. (2025). Evaluating Mendelian risk prediction models that aggregate across genes and cancers.**
 
 ## Dependencies
-- `PanelPRO` R package, Lee, G., et al. (2021)<sup>[1](#myfootnote1)</sup>. Download for non-clinical research purposes [here](https://projects.iq.harvard.edu/bayesmendel/panelpro).
-- Other R packages: [`abind`](https://cran.r-project.org/web/packages/abind/index.html), [`knitr`](https://cran.r-project.org/web/packages/knitr/index.html), [`pROC`](https://cran.r-project.org/web/packages/pROC/index.html)
+- `Fam3PRO` (formerly PanelPRO) R package v1.1.0, Lee, G., et al. (2021)<sup>[1](#myfootnote1)</sup>. Available [here](https://projects.iq.harvard.edu/bayesmendel/panelpro).
+- Other R packages: [`abind`](https://cran.r-project.org/web/packages/abind/index.html), [`knitr`](https://cran.r-project.org/web/packages/knitr/index.html), [`pROC`](https://cran.r-project.org/web/packages/pROC/index.html), [`tidyverse`](https://cran.r-project.org/web/packages/tidyverse/index.html)
 - Data from the USC-Stanford Hereditary Cancer Panel (HCP) Testing Study. Idos, G., et al. (2019)<sup>[2](#myfootnote2)</sup>. 
 - Data from the Center for Cancer Risk Assessment at Massachusetts General Hospital (MGH). 
 
@@ -17,10 +16,9 @@ This repository contains code to reproduce the results presented in the paper
 Additional details can be found in the sub-directory README files. 
 
 - `simulate_families/`: Functions for simulating detailed pedigrees, including family history of cancer, genotypes, and tumor marker testing results. 
-- `SEER`: Repository for storing Surveillance, Epidemiology, and End Results (SEER) Program data downloaded from DevCan<sup>[3](#myfootnote3)</sup>. 
 - `est_pen/`: Code to estimate aggregate penetrances. 
 - `simulations/`: Code to run simulation studies. 
-- `validation/`: Code to validate PanelPRO models on the HCP and MGH cohorts. 
+- `validation/`: Code to validate models on the HCP and MGH cohorts. 
 
 ---
 

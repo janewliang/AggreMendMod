@@ -4,7 +4,7 @@
 type="fam"
 
 for a in $type ; do
-   for i in {1..591} ; do
+   for i in {1..443} ; do
 		index="$index $i"
    done
    elements=`echo $index | tr " " ","`

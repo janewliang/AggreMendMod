@@ -2,18 +2,13 @@
 library(pROC)
 
 # Calibration (does it sum up to the number of carriers?)
-# Ratio of the sum of predicted to the sum of observed
+# Ratio of the sum of observed to the sum of predicted 
 # Drops NAs
 # x = vector of observed values
 # pred = vector of predicted values
 calibration = function(x, pred){
   na_idx = is.na(x) | is.na(pred)
-  return((sum(pred[!na_idx])/sum(x[!na_idx])))
-}
-
-calibration_diff = function(x, pred){
-  na_idx = is.na(x) | is.na(pred)
-  return(sum(pred[!na_idx]) - sum(x[!na_idx]))
+  return((sum(x[!na_idx])/sum(pred[!na_idx])))
 }
 
 # Mean squared error
@@ -30,10 +25,8 @@ mse = function(x, pred) {
 # title = character string to include in the plot title besides the AUC
 # ... additional arguments to pass to roc.plot
 get_diagnostics = function(x, pred) {
-  return(c(AUC=tryCatch(auc(roc(x, pred)), error=function(err) NA),
-           "calib. E/O"=calibration(x, pred),
-           "calib. O/E"=calibration(pred, x),
-           "calib. E-O"=calibration_diff(x, pred),
+  return(c(AUC = tryCatch(auc(roc(x, pred)), error=function(err) NA),
+           "calib. O/E" = calibration(x, pred),
            MSE = mse(x, pred)))
 }
 

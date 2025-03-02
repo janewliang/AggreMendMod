@@ -25,6 +25,6 @@ fam = sim.runSimFam(nSibsPatern, nSibsMatern, nSibs, nGrandchild,
                     PanelPRODatabase, genes, cancers, 
                     includeGeno = FALSE, includeBiomarkers = TRUE)
                     
-# PanelPRO can be run on the simulated family
+# Fam3PRO (formerly PanelPRO) can be run on the simulated family
 out = PanelPRO:::PanelPRO11(fam)
 ```

@@ -26,24 +26,11 @@ diagnostics_boot = lapply(1:R, function(i){
   # Bootstrap data
   boot_mut_df = mut_df[idx,,drop = FALSE]
   boot_prob_df = lapply(prob_df, function(x){x[idx,]})
-  boot_mult_cancer_rels = mult_cancer_rels[idx]
   
-  all_out = list(
-    AllFamilies = sapply(boot_prob_df, function(x) {
-      get_all_diagnostics(boot_mut_df$ALLGENES, x$ALLGENES, 
-                          return_probs = FALSE)
-    }), 
-    MultipleCancers1 = sapply(boot_prob_df, function(x) {
-      get_all_diagnostics(boot_mut_df$ALLGENES[boot_mult_cancer_rels > 0], 
-                          x$ALLGENES[boot_mult_cancer_rels > 0], 
-                          return_probs=FALSE)
-    }), 
-    MultipleCancers0 = sapply(boot_prob_df, function(x) {
-      get_all_diagnostics(boot_mut_df$ALLGENES[boot_mult_cancer_rels == 0], 
-                          x$ALLGENES[boot_mult_cancer_rels == 0], 
-                          return_probs=FALSE)
-    })
-  )
+  all_out = sapply(boot_prob_df, function(x) {
+    get_all_diagnostics(boot_mut_df$ALLGENES, x$ALLGENES, 
+                        return_probs = FALSE)
+  })
   return(all_out)
 })
 
