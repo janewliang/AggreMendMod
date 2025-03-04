@@ -54,17 +54,21 @@ my_df = do.call(rbind, lapply(names(all_dat), function(x) {
     Race = sapply(all_dat[[x]], function(fam) {
       fam$race[fam$isProband==1]
     }), 
-    # Total number of counselees who are carriers
+    # Counselees carrier status for any gene
     AnyCarrier = sapply(all_dat[[x]], function(fam){
       any(as.numeric(fam[fam$isProband==1, genes]) == 1, na.rm = TRUE)
     }),
-    # Total number of counselees who are affected for cancers in the model
+    # Counselee cancer status for any cancer
     AnyCancer = sapply(all_dat[[x]], function(fam){
       any(fam[fam$isProband==1,paste0("isAff", cancers)] > 0)
     }),
-    # Total number of relatives who are affected for cancers in the model
+    # Total number of relatives who are affected for any cancer
     AnyRelCancer = sapply(all_dat[[x]], function(fam){
       sum(apply(fam[,paste0("isAff", cancers)] > 0, 1, any))
+    }),
+    # Any relative has biomarker testing
+    AnyMarker = sapply(all_dat[[x]], function(fam){
+      any(!is.na(fam[,markers]))
     })
   )
 }))
@@ -76,7 +80,15 @@ my_df$Race[is.na(my_df$Race)] = "All_Races"
 # Nicer factor levels for race
 my_df = my_df %>% 
   mutate(
-    Race = fct_recode(Race, "All Races" = "All_Races"))
+    Ancestry = fct_recode(Ancestry, 
+                          "Ashkenazi Jewish" = "AJ", 
+                          "Non-Ashkenazi Jewish" = "nonAJ"), 
+    Race = fct_recode(Race, 
+                      "American Indian and Alaska Native" = "AIAN", 
+                      "All Races" = "All_Races", 
+                      "White Hispanic" = "WH", 
+                      "White Non-Hispanic" = "WNH"), 
+    Race = factor(Race, levels = sort(levels(Race))))
 
 # Create a "Table 1"
 my_df %>% 
@@ -97,5 +109,6 @@ my_df %>%
       Race = "Counselee race, n (%)", 
       AnyCarrier = "Counselee carriers of a pathogenic variant on any gene, n (%)", 
       AnyCancer = "Counselees diagnosed with any cancer, n (%)", 
-      AnyRelCancer = "Family members diagnosed with any cancer, mean (SD)")) %>% 
+      AnyRelCancer = "Family members diagnosed with any cancer, mean (SD)", 
+      AnyMarker = "Families with any tumor biomarker testing")) %>% 
   as_kable(format = "latex")
