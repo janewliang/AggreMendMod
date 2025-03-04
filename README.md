@@ -8,7 +8,7 @@ This repository contains code to reproduce the results presented in the paper
 
 ## Dependencies
 - `Fam3PRO` (formerly PanelPRO) R package v1.1.0, Lee, G., et al. (2021)<sup>[1](#myfootnote1)</sup>. Available [here](https://projects.iq.harvard.edu/bayesmendel/panelpro).
-- Other R packages: [`abind`](https://cran.r-project.org/web/packages/abind/index.html), [`knitr`](https://cran.r-project.org/web/packages/knitr/index.html), [`pROC`](https://cran.r-project.org/web/packages/pROC/index.html), [`tidyverse`](https://cran.r-project.org/web/packages/tidyverse/index.html)
+- Other R packages: [`abind`](https://cran.r-project.org/web/packages/abind/index.html), [`gtsummary`](https://cran.r-project.org/web/packages/gtsummary/index.html), [`knitr`](https://cran.r-project.org/web/packages/knitr/index.html), [`pROC`](https://cran.r-project.org/web/packages/pROC/index.html), [`tidyverse`](https://cran.r-project.org/web/packages/tidyverse/index.html)
 - Data from the USC-Stanford Hereditary Cancer Panel (HCP) Testing Study. Idos, G., et al. (2019)<sup>[2](#myfootnote2)</sup>. 
 - Data from the Center for Cancer Risk Assessment at Massachusetts General Hospital (MGH). 
 

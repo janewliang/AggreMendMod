@@ -4,6 +4,7 @@ Files:
 - `run_model_functions.R`: Functions that run models and extract carrier probability results. 
 - `diagnostics_functions.R`: Functions for obtaining diagnostic metrics.
 - `combine_diagnostics_boot.R`: Code to load bootstrapped diagnostic metrics returned from separate cluster jobs.
+- `tab1`: Code to generate a "Table 1" summarizing the characteristics of the cohorts. 
 
 Sub-directories: 
 - `hcp/`: Validate the aggregate model on the HCP cohort. Assumes that pre-processed pedigrees are saved as a list in `hcp_families.rData`. 
