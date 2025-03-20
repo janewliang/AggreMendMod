@@ -38,12 +38,12 @@ plot_df %>%
   theme(strip.background = element_blank(),
         strip.text = element_text(face = "bold"), 
         strip.placement = "outside", 
-        panel.spacing = unit(1, "lines"), 
+        panel.spacing = unit(0.5, "lines"), 
         plot.margin = unit(c(0.5, 0.5, -0.5, -1), "lines"), 
         legend.position = "none", 
-        axis.text.x = element_text(angle = 60, hjust=1))
+        axis.text.x = element_text(angle = 60, hjust = 1))
 ggsave("./results/diagnostics/diagnostics.png", 
-       width = 7, height = 4)
+       width = 6, height = 4, dpi = 300)
 
 # Tables of diagnostic metrics
 plot_df %>% 
