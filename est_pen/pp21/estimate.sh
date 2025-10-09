@@ -11,4 +11,4 @@
 #SBATCH --mail-type=END # Email
 #SBATCH --mail-user=jwliang@stanford.edu
 
-R CMD BATCH --no-restore --no-save ../estimate_pp21.R results/cluster/estimate.Rout
+R CMD BATCH --no-restore --no-save estimate_pp21.R results/cluster/estimate.Rout

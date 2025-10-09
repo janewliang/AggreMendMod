@@ -16,7 +16,7 @@ This repository contains code to reproduce the results presented in the paper
 Additional details can be found in the sub-directory README files. 
 
 - `simulate_families/`: Functions for simulating detailed pedigrees, including family history of cancer, genotypes, and tumor marker testing results. 
-- `est_pen/`: Code to estimate aggregate penetrances. 
+- `est_pen/`: Code to estimate aggregate penetrances and RData file with the resulting estimates
 - `simulations/`: Code to run simulation studies. 
 - `validation/`: Code to validate models on the HCP and MGH cohorts. 
 

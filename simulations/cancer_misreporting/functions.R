@@ -48,9 +48,8 @@ load("../../est_pen/pp21/estimated_parameters.rData")
 # Estimate ALLGENES allele frequency
 af_idx = PanelPRO:::formatGeneNames(rownames(PanelPRODatabase$AlleleFrequency), 
                                     format = "only_gene") %in% genes
-af = sum(PanelPRODatabase$AlleleFrequency[af_idx,"nonAJ"]) + 
+af = sum(PanelPRODatabase$AlleleFrequency[af_idx,"nonAJ"]) - 
   sum(apply(combn(PanelPRODatabase$AlleleFrequency[af_idx,"nonAJ"], 2), 2, prod))
-# 0.01137739
 
 # New database
 new_db = PanelPRODatabase
