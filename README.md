@@ -4,7 +4,7 @@
 
 This repository contains code to reproduce the results presented in the paper 
 
-> **Liang, J. W., Shannon, K. M., Bear, L. M., McCarthy, A. M., Idos, G. E., Hong, C., Gruber, S. B., Braun, D., & Parmigiani, G. (2025). Evaluating Mendelian risk prediction models that aggregate across genes and cancers.**
+> **Liang JW, Idos GE, Hong C, Shannon KM, Bear LM, Pichardo JM, Guan Z, McCarthy AM, Ford JM, Kurian AW, Gruber SB, Braun D, Parmigiani G. Evaluating a Mendelian Risk Prediction Model That Aggregates Across Genes and Cancers. Genet Epidemiol. 2026 Apr;50(3):e70038. doi: 10.1002/gepi.70038. PMID: 41793308; PMCID: PMC13101823.**
 
 ## Dependencies
 - `Fam3PRO` (formerly PanelPRO) R package v1.1.0, Lee, G., et al. (2021)<sup>[1](#myfootnote1)</sup>. Available [here](https://projects.iq.harvard.edu/bayesmendel/panelpro).
@@ -16,7 +16,7 @@ This repository contains code to reproduce the results presented in the paper
 Additional details can be found in the sub-directory README files. 
 
 - `simulate_families/`: Functions for simulating detailed pedigrees, including family history of cancer, genotypes, and tumor marker testing results. 
-- `est_pen/`: Code to estimate aggregate penetrances and RData file with the resulting estimates
+- `est_pen/`: Code to estimate aggregate penetrances and RData file with the resulting estimates. 
 - `simulations/`: Code to run simulation studies. 
 - `validation/`: Code to validate models on the HCP and MGH cohorts. 
 

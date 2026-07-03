@@ -8,4 +8,4 @@ The sub-directory contains the following files:
 - `rscript_fam.job` and`submitJobs_fam.sh`: Shell scripts for simulating families, for usage on a high performance computing cluster. 
 - `estimate_pp21.R`: Code to estimate penetrances aggregating over 21 genes and 17 cancers, based on simulated data. 
 - `estimate.sh`: Shell script for estimating penetrances, for usage on a high performance computing cluster. 
-- `estimated_parameters.rData`: RData file with the resulting aggregate penetrance estimates
+- `estimated_parameters.rData`: RData file with the resulting aggregate penetrance estimates.
